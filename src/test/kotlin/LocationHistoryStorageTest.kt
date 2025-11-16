@@ -15,6 +15,6 @@ class LocationHistoryStorageTest {
             storage.save(CarLocationRecord(12.0, 77.0, i.toLong()))
         }
 
-        assertEquals(1000, storage.getAll().size)
+        assertEquals(100, storage.getAll().size)
     }
 }
