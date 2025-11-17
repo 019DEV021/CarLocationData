@@ -12,7 +12,8 @@ class LocationHistoryStorageTest {
         val storage = LocationHistoryStorage()
 
         for (i in 1..100) {
-            storage.save(CarLocationRecord(12.0, 77.0, i.toLong()))
+            storage.save(CarLocationRecord("12", 77.0, i.toDouble()
+                ,"Sedan"))
         }
 
         assertEquals(100, storage.getAll().size)

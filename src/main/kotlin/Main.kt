@@ -1,30 +1,31 @@
 package main.kotlin
 
 import main.kotlin.data.CarLocationRecord
-import main.kotlin.filter.SedanLocationFilter
-import main.kotlin.storage.LocationHistoryStorage
+import main.kotlin.filter.FilterLogic
+import main.kotlin.search.DummyVehicleSearchService
+
 
 fun main() {
 
-    val rawData = listOf(
-        CarLocationRecord(12.0, 77.0, 1000),
-        CarLocationRecord(12.0001, 77.0001, 2000),
-        CarLocationRecord(35.0, 89.0, 3000), // Unrealistic jump
-        CarLocationRecord(12.0002, 77.0002, 4000)
+    println("Starting application...")
+
+    val inputData = listOf(
+        CarLocationRecord("1", 19.0, 72.0, "SEDAN"),
+        CarLocationRecord("2", 22.0, 88.0, "EV"),
+        CarLocationRecord("3", -40.0, 100.0, "HATCHBACK"),
+        CarLocationRecord("4", 200.0, 72.0, "SEDAN") // invalid lat
     )
 
-    val filter = SedanLocationFilter()
-    val filtered = filter.filter(rawData)
+    val filter = FilterLogic()
+    val validVehicles = filter.filter(inputData)
 
-    val storage = LocationHistoryStorage()
-    filtered.forEach { storage.save(it) }
+    println("Valid filtered vehicles:")
+    validVehicles.forEach { println(it) }
 
-    println("RAW DATA:")
-    rawData.forEach { println(it) }
+    val vehicleReqService = DummyVehicleSearchService()
 
-    println("\nFILTERED DATA:")
-    filtered.forEach { println(it) }
-
-    println("\nSTORED HISTORY:")
-    storage.getAll().forEach { println(it) }
+    validVehicles.forEach { vehicle ->
+        val vehicleReq = vehicleReqService.findNearby(vehicle)
+        println("Near by ${vehicle.vehicleId}: $vehicleReq")
+    }
 }
